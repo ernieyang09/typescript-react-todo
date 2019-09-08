@@ -1,5 +1,7 @@
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op;
 
 import {
   Todo,
@@ -16,8 +18,19 @@ app.get('/', function(req, res) {
 });
 
 app.get('/api/todo', async function(req, res) {
-  const todos = await Todo.findAll();
-  await sleep(1500);
+  let todos;
+  if (req.query.q) {
+    todos = await Todo.findAll({
+      where: {
+        title: {
+          [Op.like]: `%${req.query.q}%`
+        }
+      }
+    });
+  } else {
+    todos = await Todo.findAll();
+  }
+  await sleep(1000);
   res.send(todos);
 });
 

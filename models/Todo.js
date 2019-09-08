@@ -25,9 +25,15 @@ module.exports = sequelize => {
         type: Sequelize.DATE,
         allowNull: false,
         defaultValue: Sequelize.NOW,
+        get() {
+          return this.getDataValue('create_at').getTime();
+        }
       },
       update_at: {
         type: Sequelize.DATE,
+        get() {
+          return this.getDataValue('update_at') && this.getDataValue('update_at').getTime();
+        }
       },
     },
     { 

@@ -12,9 +12,9 @@ import {
   TodoForm,
 } from '@components';
 
-import {
-  addTodo
-} from '@modules/todo';
+// import {
+//   addTodo
+// } from '@modules/todo';
 
 
 const Add = () => {
@@ -23,9 +23,9 @@ const Add = () => {
 
   const dispatch = useDispatch();
 
-  const t1 = () => {
-    dispatch(addTodo({...form.current, id: 99, create_at: new Date().getTime(), update_at: null }))
-  }
+  // const t1 = () => {
+  //   dispatch(addTodo({...form.current, id: 99, create_at: new Date().getTime(), update_at: null }))
+  // }
 
   return (
     <Page>
@@ -35,7 +35,7 @@ const Add = () => {
         textAlign='right'
       >
         <Button
-          onClick={t1}
+          // onClick={t1}
         >
           Add
         </Button>

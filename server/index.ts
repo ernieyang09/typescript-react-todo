@@ -6,6 +6,8 @@ import {
 } from '../models';
 
 
+let sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+
 const app = express();
 app.use(bodyParser.json());
 
@@ -15,6 +17,7 @@ app.get('/', function(req, res) {
 
 app.get('/api/todo', async function(req, res) {
   const todos = await Todo.findAll();
+  await sleep(1500);
   res.send(todos);
 });
 

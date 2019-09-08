@@ -1,27 +1,17 @@
-
-
-
 import { IAction, ITodo } from "./type";
 const prefix = 'TODO';
 
-const CREATE = `${prefix}/CREATE`;
+const READ = `${prefix}/LOAD`;
 
 
-const test = () => {
-  return [...Array(20)].map((v, k) => ({ id: k.toString(), title: '123', create_at: new Date().getTime(), isDone: false, update_at: new Date().getTime() }))
-}
-
-const initState: ITodo[] = test();
-
-
-
+const initState: ITodo[] = [];
 
 
 
 export default (state = initState, action: IAction) => {
   switch (action.type) {
-    case CREATE:
-      return [action.payload, ...state]
+    case READ:
+      return [...action.payload]
     default:
       return state;
   }
@@ -29,7 +19,7 @@ export default (state = initState, action: IAction) => {
 
 export const TodoSelector = (s) => s.todos;
 
-export const addTodo = (todo) => ({
-    type: CREATE,
-    payload: todo,
+export const loadTodos = (todos: ITodo[]) => ({
+  type: READ,
+  payload: todos,
 });

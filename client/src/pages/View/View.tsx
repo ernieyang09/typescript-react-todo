@@ -27,6 +27,7 @@ import {
 import {
   TodoSelector,
   loadTodos,
+  initTodos,
 } from '@modules/todo';
 
 import { ITodo } from '@modules/type';
@@ -38,25 +39,11 @@ const search$ = new Subject();
 
 const View = () => {
 
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [search, setSearch] = useState('');
   const dispatch = useDispatch();
 
-  const onSearchChange = (e) => {
-    setSearch(e.target.value);
-    search$.next(e.target.value);
-  }
-
   useEffect(()=> {
-    fetch('/api/todo').then(
-      r => r.json()
-    ).then((todos) => {
-      dispatch(loadTodos(todos));
-      setIsLoading(false);
-    })
-  }, [])
-
-  useEffect(() => {
     const obs$ = search$.pipe(
       debounceTime(500),
       tap(() => { setIsLoading(true) }),
@@ -76,12 +63,25 @@ const View = () => {
       }
     );
 
+    search$.next(search);
+
     return () => {
+      dispatch(initTodos());
       obs$.unsubscribe();
     }
-  }, []);
+  }, [])
+
+  const onSearchChange = (e) => {
+    setSearch(e.target.value);
+    search$.next(e.target.value);
+  }
+
+  const refreshTodo = () => {
+    search$.next(search);
+  }
 
   const todos = useSelector(TodoSelector);
+
   return (
     <Page>
       <SearchInput
@@ -95,7 +95,7 @@ const View = () => {
             <Spinner marginTop='50px' marginX="auto" />
           </Pane>
         :
-          todos.map((t) => <Todo key={t.id} {...t} />)
+          todos.map((t) => <Todo key={t.id} {...t} refreshTodo={refreshTodo} />)
       }
     </Page>
   )

@@ -8,27 +8,23 @@ import {
 
 
 
-const TodoForm = React.forwardRef((props, ref: any) => {
-  const { useState } = React;
-  const [form, setForm] = useState(ref.current);
+const TodoForm = (props) => {
+
   const handleChange = (e) => {
     const newValue = { [e.target.name]: e.target.value };
-    setForm(f => ({ ...f, ...newValue }))
+    props.setForm(f => ({ ...f, ...newValue }))
   }
 
-  React.useImperativeHandle(ref, () => {
-    return form
-  });
 
   return (
     <Pane>
       <Text>Title: </Text>
       <TextInput name='title'
-        value={form.title}
+        value={props.form.title}
         onChange={handleChange}
       />
     </Pane>
   )
-});
+};
 
 export default TodoForm;

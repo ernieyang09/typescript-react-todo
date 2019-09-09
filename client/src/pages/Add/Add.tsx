@@ -1,10 +1,11 @@
 import * as React from 'react';
-import { useRef } from 'react';
-import { useDispatch } from 'react-redux';
+import { useState } from 'react';
+import { withRouter } from 'react-router-dom';
 
 import {
   Pane,
   Button,
+  toaster,
 } from 'evergreen-ui';
 
 import {
@@ -12,30 +13,33 @@ import {
   TodoForm,
 } from '@components';
 
-// import {
-//   addTodo
-// } from '@modules/todo';
+const Add = (props) => {
 
+  const [form, setForm ] =  useState({ title: '' });
 
-const Add = () => {
-  const form: any = useRef();
-  form.current = { 'title': '' };
-
-  const dispatch = useDispatch();
-
-  // const t1 = () => {
-  //   dispatch(addTodo({...form.current, id: 99, create_at: new Date().getTime(), update_at: null }))
-  // }
+  const onAdd = () => {
+    fetch('/api/todo', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({...form, isDone: false })
+    })
+    .then(r => {
+      if (r.status === 200) {
+        toaster.success('Add success');
+        props.history.push('/');
+      }
+    });
+  }
 
   return (
     <Page>
-      <TodoForm ref={form} />
+      <TodoForm form={form} setForm={setForm} />
       <Pane
         marginTop='1em'
         textAlign='right'
       >
         <Button
-          // onClick={t1}
+          onClick={onAdd}
         >
           Add
         </Button>
@@ -44,4 +48,4 @@ const Add = () => {
   )
 };
 
-export default Add;
+export default withRouter(Add);

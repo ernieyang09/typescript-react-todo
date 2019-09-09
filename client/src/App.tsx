@@ -13,8 +13,8 @@ const App = () => {
       <Header />
       <Switch>
         <Route exact path='/' component={View} />
-        <Route path='/:itemid/edit' component={Edit} />
         <Route path='/add' component={Add} />
+        <Route path='/edit/:todoId' component={Edit} />
       </Switch>
     </Router>
   )
